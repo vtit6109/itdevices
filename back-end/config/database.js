@@ -1,8 +1,10 @@
+require('dotenv').config();
+
 var config = {
-    user: 'thang.vu',
-    password: '234792Th@ng',
-    server: 'TAVN-40LSWL3\\SQLEXPRESS',  
-    database: 'ITDEVICES',
+    user:`${process.env.DB_USERNAME}`,
+    password: `${process.env.DB_PW}`,
+    server: `${process.env.DB_SV}`,  
+    database: `${process.env.DB_NAME}`,
     options: {
         trustServerCertificate: true // Thêm nếu gặp vấn đề với chứng chỉ
         }

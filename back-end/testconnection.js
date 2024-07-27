@@ -1,7 +1,7 @@
 const mssql = require('mssql');
 const config = require('./config/database'); 
 
-console.log(config); // In ra cấu hình để kiểm tra
+console.log(config);
 
 (async () => {
     try {

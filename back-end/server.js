@@ -7,6 +7,7 @@ const port = 3000;
 // Import modules ----------------------------------------------------------------
 const users = require('./routes/UserRouter');
 const departments = require('./routes/DepartmentsRouter')
+const categories = require('./routes/CategoryRouter')
 
 // Middleware ----------------------------------------------------------------
 app.use(bodyParser.json()); 
@@ -21,7 +22,8 @@ app.use((err, req, res, next) => {
 
 // Use router ----------------------------------------------------------------
 app.use('/itdevices/users', users);
-app.use('/itdevices/departments', departments)
+app.use('/itdevices/departments', departments);
+app.use('/itdevices/categories', categories);
 
 // Sử dụng thư mục 'public' để phục vụ các file tĩnh
 app.use(express.static(path.join(__dirname, 'public')));

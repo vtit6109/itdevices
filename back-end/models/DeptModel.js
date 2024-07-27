@@ -16,9 +16,7 @@ class Department {
         try {
             const request = pool.request();
             const result = await request.query('SELECT * FROM Departments');
-            console.log(result);
             const depts = result.recordset.map(row => new Department(row.DeptID, row.DeptName, row.DeptDes)); // row.Dept... là row.<Field của table not field của Contructor>
-            console.log(depts);
             return depts;
         } catch (error) {
             console.error(error);

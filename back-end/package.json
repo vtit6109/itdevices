@@ -13,13 +13,15 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "nodemon testconnection.js"
+    "test": "nodemon testconnection.js",
+    "formatcode":"prettier --write ."
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "prettier": "3.3.3"
   }
 }

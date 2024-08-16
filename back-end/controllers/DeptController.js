@@ -25,8 +25,7 @@ exports.getDeptById = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi lấy thông tin bộ phận' });
     }
 };
-
-exports.createDept = async (req, res) => {
+    exports.createDept = async (req, res) => {
     const { deptName, deptDes } = req.body;
     try {
         const newDept = await Dept.createDept(deptName, deptDes);

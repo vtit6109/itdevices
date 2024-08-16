@@ -6,7 +6,11 @@ var config = {
     server: `${process.env.DB_SV}`,  
     database: `${process.env.DB_NAME}`,
     options: {
-        trustServerCertificate: true // Thêm nếu gặp vấn đề với chứng chỉ
+        trustServerCertificate: true, // Thêm nếu gặp vấn đề với chứng chỉ
+        enableArithAbort: true,
+        useUTC: false,
+        parseJSON: true,
+        padChar: false
         }
   };
 

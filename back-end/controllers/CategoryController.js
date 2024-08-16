@@ -14,9 +14,9 @@ exports.getAllCategory = async (req, res) =>{
 exports.getCategoryById = async (req, res) => {
     const categoryID = req.params.id;
     try {
-        const category = await Dept.getDeptByID(categoryID);
+        const category = await Category.getCateByID(categoryID);
        
-        if (dept) {
+        if (category) {
             res.status(200).json(category);
         } else {
             res.status(404).json({ message: 'Không tìm thấy danh mục' });

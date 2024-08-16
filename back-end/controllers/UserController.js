@@ -26,9 +26,9 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-    const { userName, userEmail, deptID } = req.body;
+    const { userName, userEmail, deptID, postID } = req.body;
     try {
-        const newUser = await User.createUser(userName, userEmail, deptID);
+        const newUser = await User.createUser(userName, userEmail, deptID, postID);
         res.status(201).json(newUser);
     } catch (error) {
         console.error(error);
@@ -37,14 +37,14 @@ exports.createUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-    const userId = req.params.id;
-    const { userName, userEmail, deptID } = req.body;
+    const id = req.params.id;
+    const { userName, userEmail, deptID, postID } = req.body;
     try {
-        const updatedUser = await User.updateUser(userId, userName, userEmail, deptID);
+        const updatedUser = await User.updateUser(id, userName, userEmail, deptID, postID);
         if (updatedUser) {
             res.status(200).json(updatedUser);
         } else {
-            res.status(404).json({ message: 'Không tìm thấy người dùng' });
+            res.status(404).json({ message: 'Không tìm thấy người dùng để cập nhật' });
         }
     } catch (error) {
         console.error(error);

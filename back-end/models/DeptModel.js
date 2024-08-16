@@ -98,7 +98,6 @@ class Department {
             return false;
         }
     }
-
 }
 
 module.exports = Department;

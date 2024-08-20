@@ -13,9 +13,19 @@
     transform-origin: left center; 
   }
   
+  .hover-effect-02 {
+    transition: transform 0.3s ease, color 0.3s ease;
+    transform-origin: center; 
+  }
+  
 
 .hover-effect-01:hover {
     transform: scale(1.1);
     color: #ffcc00;
   }
   
+  .hover-effect-02:hover {
+    transform: scale(1.1);
+    color: #84a7d9;
+    text-decoration: underline;
+  }

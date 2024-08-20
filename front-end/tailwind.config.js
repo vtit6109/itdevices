@@ -13,7 +13,7 @@ module.exports = {
         colors: {
           'custom-navy-dark' : '#173c78',
           'custom-navy-light' : '#3164b5',
-
+          'custom-grey-light-01': '#f5f5f5'
         },
         fontFamily: {
           'custom-source-sans-3': ['Source Sans 3', 'sans-serif'],

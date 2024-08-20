@@ -1,9 +1,9 @@
 
-
 const Footer: React.FC = () =>{
     return (
-        <footer className="bg-red-500 h-12 bottom-0">
-            <div className="text-white font-bold text-center" >FOOTER</div>
+        <footer className="bg-gray-500 h-16 text-sm text-center text-gray-300">
+            <p>Design by #VuThangIT </p>
+            <p>Source code: <p>https://github.com/vtit6109/itdevices</p></p>
         </footer>
     )
 }

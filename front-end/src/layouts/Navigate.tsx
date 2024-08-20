@@ -7,7 +7,6 @@ import { BsTable } from "react-icons/bs";
 import { FaChartBar } from "react-icons/fa";
 import { PiToolboxFill } from "react-icons/pi";
 import { RiFolderSettingsFill } from "react-icons/ri";
-
 interface NavigateProps {
   closeNav: () => void;
 }

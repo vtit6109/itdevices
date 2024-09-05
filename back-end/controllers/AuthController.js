@@ -39,31 +39,23 @@ exports.register = async (req, res) => {
   }
 };
 
+
 exports.changePassword = async (req, res) => {
   const { accountID, newPassword } = req.body;
-  try {
-    const success = await Account.changePassword(accountID, newPassword);
-    if (success) {
-      res.status(200).json({ message: 'Đổi mật khẩu thành công' });
-    } else {
-      res.status(404).json({ message: 'Không tìm thấy tài khoản để đổi mật khẩu' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Lỗi khi đổi mật khẩu', error });
+  const success = await Account.changePassword(accountID, newPassword);
+  if (success) {
+      res.status(200).json({ message: 'Password changed successfully' });
+  } else {
+      res.status(500).json({ message: 'Failed to change password' });
   }
 };
 
-// exports.logout = async (req, res) => {
-//   try {
-//     req.session.destroy((err) => {
-//       if (err) {
-//         return res.status(500).json({ message: 'Lỗi khi xóa session' });
-//       }
-//       res.clearCookie('token');
-//       res.status(200).json({ message: 'Đăng xuất thành công' });
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Lỗi máy chủ khi đăng xuất' });
-//   }
-// };
+exports.getAccount = async (req, res) => {
+  const { accountID } = req.user;
+  const account = await Account.getAccountById(accountID);
+  if (account) {
+      res.status(200).json(account);
+  } else {
+      res.status(404).json({ message: 'Account not found' });
+  }
+};

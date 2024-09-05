@@ -96,6 +96,40 @@ class Account {
             return null;
         }
     }
+
+    static async changePassword(accountID, newPassword) {
+        await poolConnect;
+        try {
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            const request = pool.request();
+            const result = await request
+                .input('accountID', sql.Int, accountID)
+                .input('accountPass', sql.VarChar, hashedPassword)
+                .query('UPDATE Accounts SET accountPass = @accountPass WHERE accountID = @accountID');
+            return result.rowsAffected[0] > 0;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
+
+    static async getAccountById(accountID) {
+        await poolConnect;
+        try {
+            const request = pool.request();
+            const result = await request
+                .input('accountID', sql.Int, accountID)
+                .query('SELECT accountID, accountName, accountPass, accountRole FROM Accounts WHERE accountID = @accountID');
+            if (result.recordset.length === 0) {
+                throw new Error('Account not found');
+            }
+            const account = result.recordset[0];
+            return new Account(account.accountID, account.accountName, account.accountPass, account.accountRole);
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 module.exports = Account;

@@ -4,14 +4,23 @@ import Card from '../components/CardInfo';
 import { FaUsers } from 'react-icons/fa'; 
 import { GiLaptop, GiCctvCamera } from "react-icons/gi";
 import { BsQrCodeScan } from "react-icons/bs";
-import { useUserData, useLaptopData } from '../hooks/useDataFetching';
+import { useDataFetching } from '../hooks/useDataFetching';
+import { Spin } from 'antd'; 
 
 const Dashboard: React.FC = () => {
-  const { users, status: userStatus } = useUserData();
-  const { laptops, status: laptopStatus } = useLaptopData();
+  const { users, laptops, userStatus, laptopStatus } = useDataFetching();
 
   if (userStatus === 'loading' || laptopStatus === 'loading') {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <Spin size="large" />
+      </div>
+    );
   }
 
   return (

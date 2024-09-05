@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface Laptop {
   laptopID: string;
@@ -34,35 +34,120 @@ const initialState: LaptopState = {
   error: null,
 };
 
-export const fetchLaptops = createAsyncThunk('laptops/fetchLaptops', async () => {
-  const response = await axios.get('/itdevices/laptops');
-  return response.data;
-});
+// Hàm helper để tạo axios instance
+const createAxiosInstance = () => {
+  return axios.create({
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
-export const fetchLaptopById = createAsyncThunk('laptops/fetchLaptopById', async (laptopID: string) => {
-  const response = await axios.get(`/itdevices/laptops/${laptopID}`);
-  return response.data;
-});
+export const fetchLaptops = createAsyncThunk<Laptop[], void, { rejectValue: string }>(
+  'laptops/fetchLaptops',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.get<Laptop[]>('/itdevices/laptops', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Lấy dữ liệu laptop thất bại');
+    }
+  }
+);
 
-export const createLaptop = createAsyncThunk('laptops/createLaptop', async (laptopData: Omit<Laptop, 'laptopID'>) => {
-  const response = await axios.post('/itdevices/laptops', laptopData);
-  return response.data;
-});
+export const fetchLaptopById = createAsyncThunk<Laptop, string, { rejectValue: string }>(
+  'laptops/fetchLaptopById',
+  async (laptopID, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.get<Laptop>(`/itdevices/laptops/${laptopID}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Lấy dữ liệu laptop thất bại');
+    }
+  }
+);
 
-export const updateLaptop = createAsyncThunk('laptops/updateLaptop', async ({ laptopID, laptopData }: { laptopID: string, laptopData: Partial<Laptop> }) => {
-  const response = await axios.put(`/itdevices/laptops/${laptopID}`, laptopData);
-  return response.data;
-});
+export const createLaptop = createAsyncThunk<Laptop, Omit<Laptop, 'laptopID'>, { rejectValue: string }>(
+  'laptops/createLaptop',
+  async (laptopData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.post<Laptop>('/itdevices/laptops', laptopData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Tạo laptop thất bại');
+    }
+  }
+);
 
-export const deleteLaptop = createAsyncThunk('laptops/deleteLaptop', async (laptopID: string) => {
-  await axios.delete(`/itdevices/laptops/${laptopID}`);
-  return laptopID;
-});
+export const updateLaptop = createAsyncThunk<Laptop, { laptopID: string, laptopData: Partial<Laptop> }, { rejectValue: string }>(
+  'laptops/updateLaptop',
+  async ({ laptopID, laptopData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.put<Laptop>(`/itdevices/laptops/${laptopID}`, laptopData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Cập nhật laptop thất bại');
+    }
+  }
+);
+
+export const deleteLaptop = createAsyncThunk<string, string, { rejectValue: string }>(
+  'laptops/deleteLaptop',
+  async (laptopID, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      await axiosInstance.delete(`/itdevices/laptops/${laptopID}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return laptopID;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Xóa laptop thất bại');
+    }
+  }
+);
 
 const laptopSlice = createSlice({
   name: 'laptops',
   initialState,
-  reducers: {},
+  reducers: {
+    resetLaptopState: (state) => {
+      state.laptops = [];
+      state.status = 'idle';
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLaptops.pending, (state) => {
@@ -74,7 +159,7 @@ const laptopSlice = createSlice({
       })
       .addCase(fetchLaptops.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || null;
+        state.error = action.payload as string;
       })
       .addCase(fetchLaptopById.fulfilled, (state, action: PayloadAction<Laptop>) => {
         const index = state.laptops.findIndex(laptop => laptop.laptopID === action.payload.laptopID);
@@ -99,4 +184,5 @@ const laptopSlice = createSlice({
   },
 });
 
+export const { resetLaptopState } = laptopSlice.actions;
 export default laptopSlice.reducer;

@@ -16,7 +16,8 @@ module.exports = {
           'custom-grey-light-01': '#f5f5f5'
         },
         fontFamily: {
-          'custom-source-sans-3': ['Source Sans 3', 'sans-serif'],
+            'custom-source-sans-3': ['Source Sans 3', 'sans-serif'],
+            apple: ['AppleSystem', 'sans-serif'],
         },
       },
     },

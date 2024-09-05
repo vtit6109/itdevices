@@ -9,7 +9,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ title, value, icon, backcolor }) => {
   return (
-    <div className={`w-full mb-6 h-28 hover-effect-02 cursor-pointer p-4 text-center rounded-lg border-2 ${backcolor}`}>
+    <div className={`w-full shadow-md mb-6 h-28 hover-effect-02 cursor-pointer p-4 text-center rounded-lg border-2 ${backcolor}`}>
       <div className="flex items-center justify-center">
         {icon}
       </div>

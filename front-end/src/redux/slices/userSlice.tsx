@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 // Định nghĩa kiểu dữ liệu cho User
 interface User {
@@ -26,41 +26,126 @@ const initialState: UserState = {
   error: null,
 };
 
+// Hàm helper để tạo axios instance
+const createAxiosInstance = () => {
+  return axios.create({
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 // Tạo async thunk để lấy tất cả users
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await axios.get('/itdevices/users');
-  return response.data;
-});
+export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
+  'users/fetchUsers',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.get<User[]>('/itdevices/users', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Lấy dữ liệu người dùng thất bại');
+    }
+  }
+);
 
 // Tạo async thunk để lấy user theo ID
-export const fetchUserById = createAsyncThunk('users/fetchUserById', async (id: number) => {
-  const response = await axios.get(`/itdevices/users/${id}`);
-  return response.data;
-});
+export const fetchUserById = createAsyncThunk<User, number, { rejectValue: string }>(
+  'users/fetchUserById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.get<User>(`/itdevices/users/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Lấy dữ liệu người dùng thất bại');
+    }
+  }
+);
 
 // Tạo async thunk để tạo user mới
-export const createUser = createAsyncThunk('users/createUser', async (userData: Omit<User, 'id'>) => {
-  const response = await axios.post('/itdevices/users', userData);
-  return response.data;
-});
+export const createUser = createAsyncThunk<User, Omit<User, 'id'>, { rejectValue: string }>(
+  'users/createUser',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.post<User>('/itdevices/users', userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Tạo người dùng thất bại');
+    }
+  }
+);
 
 // Tạo async thunk để cập nhật user
-export const updateUser = createAsyncThunk('users/updateUser', async ({ id, userData }: { id: number, userData: Partial<User> }) => {
-  const response = await axios.put(`/itdevices/users/${id}`, userData);
-  return response.data;
-});
+export const updateUser = createAsyncThunk<User, { id: number, userData: Partial<User> }, { rejectValue: string }>(
+  'users/updateUser',
+  async ({ id, userData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      const response = await axiosInstance.put<User>(`/itdevices/users/${id}`, userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Cập nhật người dùng thất bại');
+    }
+  }
+);
 
 // Tạo async thunk để xóa user
-export const deleteUser = createAsyncThunk('users/deleteUser', async (id: number) => {
-  await axios.delete(`/itdevices/users/${id}`);
-  return id;
-});
+export const deleteUser = createAsyncThunk<number, number, { rejectValue: string }>(
+  'users/deleteUser',
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const axiosInstance = createAxiosInstance();
+      await axiosInstance.delete(`/itdevices/users/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return id;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      return rejectWithValue(axiosError.response?.data?.message || 'Xóa người dùng thất bại');
+    }
+  }
+);
 
 // Tạo slice
 const userSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    resetUserState: (state) => {
+        state.users = [];
+        state.status = 'idle';
+        state.error = null;
+      },
+    },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
@@ -72,7 +157,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || null;
+        state.error = action.payload as string;
       })
       .addCase(fetchUserById.fulfilled, (state, action: PayloadAction<User>) => {
         const index = state.users.findIndex(user => user.id === action.payload.id);
@@ -97,4 +182,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { resetUserState } = userSlice.actions;
 export default userSlice.reducer;

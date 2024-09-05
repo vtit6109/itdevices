@@ -1,6 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: 'AppleSystem';
+  font-weight: 400;
+  font-style: normal;
+  src: local('-apple-system'), local('BlinkMacSystemFont'), local('Segoe UI'), local('Roboto'), local('Helvetica Neue'), local('Arial'), local('sans-serif');
+}
+
+body {
+  font-family: 'AppleSystem', sans-serif;
+}
 
 * {
     box-sizing: border-box;
@@ -11,21 +21,20 @@
 .hover-effect-01 {
     transition: transform 0.3s ease, color 0.3s ease;
     transform-origin: left center; 
-  }
-  
-  .hover-effect-02 {
+}
+
+.hover-effect-02 {
     transition: transform 0.3s ease, color 0.3s ease;
     transform-origin: center; 
-  }
-  
+}
 
 .hover-effect-01:hover {
-    transform: scale(1.1);
-    color: #ffcc00;
-  }
-  
-  .hover-effect-02:hover {
+    transform: scale-y(1.1);
+    color: #66c2de;
+}
+
+.hover-effect-02:hover {
     transform: scale(1.1);
     color: #84a7d9;
     text-decoration: underline;
-  }
+}

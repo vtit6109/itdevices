@@ -3,31 +3,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { fetchUsers } from '../redux/slices/userSlice';
 import { fetchLaptops } from '../redux/slices/laptopSlice';
+import { fetchAccount } from '../redux/slices/authSlice';
 
-export const useUserData = () => {
+export const useDataFetching = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: RootState) => state.users.users);
-  const status = useSelector((state: RootState) => state.users.status);
-
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchUsers());
-    }
-  }, [status, dispatch]);
-
-  return { users, status };
-};
-
-export const useLaptopData = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const laptops = useSelector((state: RootState) => state.laptops.laptops);
-  const status = useSelector((state: RootState) => state.laptops.status);
+  const userStatus = useSelector((state: RootState) => state.users.status);
+  const laptopStatus = useSelector((state: RootState) => state.laptops.status);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const account = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLaptops());
+    if (isAuthenticated) {
+      if (userStatus === 'idle') {
+        dispatch(fetchUsers());
+      }
+      if (laptopStatus === 'idle') {
+        dispatch(fetchLaptops());
+      }
+      dispatch(fetchAccount());
     }
-  }, [status, dispatch]);
+  }, [userStatus, laptopStatus, isAuthenticated, dispatch]);
 
-  return { laptops, status };
+  return { users, laptops, userStatus, laptopStatus, account };
 };

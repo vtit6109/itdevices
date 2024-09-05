@@ -8,6 +8,7 @@ import LaptopsTable from '../screens/tables/LaptopTable';
 import Reports from '../screens/Reports';
 import Manage from '../screens/Manage';
 import Settings from '../screens/Settings';
+import Register from '../components/Auth/Register';
 
 const AppRouter: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter: React.FC = () => {
         <Route path="/reports" element={<Reports />} />
         <Route path="/manage" element={<Manage />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );

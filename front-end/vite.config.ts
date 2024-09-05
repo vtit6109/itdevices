@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       '/itdevices': 'http://localhost:3000' /*
       
-      Tất nhiên, tôi sẽ giải thích chi tiết về cách số 4 - sử dụng proxy trong môi trường phát triển (development).
+     sử dụng proxy trong môi trường phát triển (development).
     Khi bạn đang phát triển một ứng dụng web sử dụng React (hoặc bất kỳ front-end framework nào) kết hợp với một API back-end, bạn thường sẽ chạy front-end và back-end trên các cổng khác nhau của localhost. Ví dụ:
 
     Front-end (React app): http://localhost:5173

@@ -4,14 +4,18 @@ import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Navigate from './layouts/Navigate';
 import { MenuOutlined } from '@ant-design/icons';
-import { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { checkAuth } from './redux/slices/authSlice';
+import { useAppDispatch } from './hooks/useAppDisspatch';
 
 const MemoizedHeader = memo(Header);
 const MemoizedFooter = memo(Footer);
 const MemoizedAppRouter = memo(AppRouter);
 
 function App() {
+  const dispatch = useAppDispatch();
+
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const handleMenuClick = useCallback(() => {
@@ -22,11 +26,15 @@ function App() {
     setIsNavOpen(false);
   }, []);
 
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
   const MemoizedNavigate = memo(() => <Navigate closeNav={closeNav} />);
 
   return (
     <Router>
-      <div className='relative flex h-screen w-full font-custom-source-sans-3'>
+      <div className='relative flex h-screen w-full font-apple'>
         <div className={`fixed lg:w-[18%] w-[60%] h-full z-30 ${
           isNavOpen ? 'block animate-slideInLeft' : 'hidden lg:block'
         }`}>

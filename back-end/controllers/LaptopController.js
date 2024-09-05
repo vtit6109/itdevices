@@ -1,70 +1,77 @@
 const LaptopInfo = require('../models/LaptopModel');
 
-exports.getAllLaptopInfos = async (req, res) => {
+exports.getAllLaptops = async (req, res) => {
     try {
-        const laptopInfos = await LaptopInfo.getAllLaptop();
-        res.status(200).json(laptopInfos);
+        const laptops = await LaptopInfo.getAllLaptop();
+        res.status(200).json(laptops);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error when getting the list of laptop information' });
+        res.status(500).json({ message: 'Lỗi khi lấy danh sách laptops' });
     }
 };
 
-exports.getLaptopInfoById = async (req, res) => {
+exports.getLaptopById = async (req, res) => {
     const laptopID = req.params.id;
     try {
-        const laptopInfo = await LaptopInfo.getLaptopByID(laptopID);
-        if (laptopInfo) {
-            res.status(200).json(laptopInfo);
+        const laptop = await LaptopInfo.getLaptopByID(laptopID);
+        if (laptop) {
+            res.status(200).json(laptop);
         } else {
-            res.status(404).json({ message: 'Laptop information not found' });
+            res.status(404).json({ message: 'Không tìm thấy laptop' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error when getting laptop information' });
+        res.status(500).json({ message: 'Lỗi khi lấy thông tin laptop' });
     }
 };
 
-exports.createLaptopInfo = async (req, res) => {
+exports.createLaptop = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const { laptopID, laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID } = req.body;
     try {
-        const newLaptopInfo = await LaptopInfo.createLaptop(laptopID, laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID);
-        res.status(201).json(newLaptopInfo);
+        const newLaptop = await LaptopInfo.createLaptop(laptopID, laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID);
+        res.status(201).json(newLaptop);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error when creating new laptop information' });
+        res.status(500).json({ message: 'Lỗi khi tạo laptop mới' });
     }
 };
 
-exports.updateLaptopInfo = async (req, res) => {
+exports.updateLaptop = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const id = req.params.id;
     const { laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID } = req.body;
     try {
-        const updatedLaptopInfo = await LaptopInfo.updateLaptop(id, laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID);
-        if (updatedLaptopInfo) {
-            res.status(200).json(updatedLaptopInfo); 
+        const updatedLaptop = await LaptopInfo.updateLaptop(id, laptopName, toolNumber, purchaseCode, brandID, modelID, categoryID, stateID, userID, changesComponentsID, handoverID);
+        if (updatedLaptop) {
+            res.status(200).json(updatedLaptop);
         } else {
-            res.status(404).json({ message: 'Laptop information not found to update' });
+            res.status(404).json({ message: 'Không tìm thấy laptop để cập nhật' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error when updating laptop information' });
+        res.status(500).json({ message: 'Lỗi khi cập nhật laptop' });
     }
 };
 
-exports.deleteLaptopInfo = async (req, res) => {
+exports.deleteLaptop = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const laptopID = req.params.id;
     try {
-        const deletedLaptopInfo = await LaptopInfo.deleteLaptopInfo(laptopID);
-        if (deletedLaptopInfo) {
-            res.status(200).json({ message: 'Successfully deleted laptop information' });
+        const deletedLaptop = await LaptopInfo.deleteLaptop(laptopID);
+        if (deletedLaptop) {
+            res.status(200).json({ message: 'Xóa laptop thành công' });
         } else {
-            res.status(404).json({ message: 'Laptop information not found' });
+            res.status(404).json({ message: 'Không tìm thấy laptop để xóa' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error when deleting laptop information' });
+        res.status(500).json({ message: 'Lỗi khi xóa laptop' });
     }
 };
-
-module.exports = exports;

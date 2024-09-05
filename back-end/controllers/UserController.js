@@ -26,6 +26,9 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const { userName, userEmail, deptID, postID } = req.body;
     try {
         const newUser = await User.createUser(userName, userEmail, deptID, postID);
@@ -37,6 +40,9 @@ exports.createUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const id = req.params.id;
     const { userName, userEmail, deptID, postID } = req.body;
     try {
@@ -53,6 +59,9 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    }
     const userId = req.params.id;
     try {
         const deletedUser = await User.deleteUser(userId);

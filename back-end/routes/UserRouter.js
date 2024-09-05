@@ -1,20 +1,24 @@
 const express = require('express');
-const controller = require('../controllers/UserController'); // Đảm bảo tên file đúng là userController.js
 const router = express.Router();
+const userController = require('../controllers/UserController');
+const { authMiddleware, adminMiddleware, userMiddleware } = require('../middleware/authMiddleware');
 
-// GET all users
-router.get('/', controller.getAllUsers);
+// Áp dụng authMiddleware cho tất cả các route
+router.use(authMiddleware);
 
-// GET user by ID
-router.get('/:id', controller.getUserById);
+// Lấy tất cả người dùng (chỉ admin)
+router.get('/', userMiddleware, userController.getAllUsers);
 
-// POST create new user
-router.post('/', controller.createUser);
+// Lấy người dùng theo ID (chỉ admin và user)
+router.get('/:id', userMiddleware, userController.getUserById);
 
-// PUT update user
-router.put('/:id', controller.updateUser);
+// Tạo mới người dùng (chỉ admin)
+router.post('/', adminMiddleware, userController.createUser);
 
-// DELETE delete user
-router.delete('/:id', controller.deleteUser);
+// Cập nhật người dùng (chỉ admin)
+router.put('/:id', adminMiddleware, userController.updateUser);
+
+// Xóa người dùng (chỉ admin)
+router.delete('/:id', adminMiddleware, userController.deleteUser);
 
 module.exports = router;

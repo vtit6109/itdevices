@@ -1,20 +1,24 @@
 const express = require('express');
-const controller = require('../controllers/LaptopController') 
 const router = express.Router();
+const laptopController = require('../controllers/LaptopController');
+const { authMiddleware, adminMiddleware, userMiddleware } = require('../middleware/authMiddleware');
 
-// GET all 
-router.get('/', controller.getAllLaptopInfos);
+// Áp dụng authMiddleware cho tất cả các route
+router.use(authMiddleware);
 
-// GET  by ID
-router.get('/:id', controller.getLaptopInfoById);
+// Lấy tất cả laptops (chỉ admin và user)
+router.get('/', userMiddleware, laptopController.getAllLaptops);
 
-// POST create new 
-router.post('/', controller.createLaptopInfo);
+// Lấy laptop theo ID (chỉ admin và user)
+router.get('/:id', userMiddleware, laptopController.getLaptopById);
 
-// PUT update 
-router.put('/:id', controller.updateLaptopInfo);
+// Tạo mới laptop (chỉ admin)
+router.post('/', adminMiddleware, laptopController.createLaptop);
 
-// DELETE delete 
-router.delete('/:id', controller.deleteLaptopInfo);
+// Cập nhật laptop (chỉ admin)
+router.put('/:id', adminMiddleware, laptopController.updateLaptop);
+
+// Xóa laptop (chỉ admin)
+router.delete('/:id', adminMiddleware, laptopController.deleteLaptop);
 
 module.exports = router;

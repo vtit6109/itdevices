@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../redux/store';
-import { fetchUsers } from '../redux/slices/userSlice';
-import { fetchLaptops } from '../redux/slices/laptopSlice';
-import { fetchAccount } from '../redux/slices/authSlice';
+import { AppDispatch, RootState } from '../store';
+import { fetchUsers } from '../slices/userSlice';
+import { fetchLaptops } from '../slices/laptopSlice';
+import { fetchAccount } from '../slices/authSlice';
 
 export const useDataFetching = () => {
   const dispatch = useDispatch<AppDispatch>();

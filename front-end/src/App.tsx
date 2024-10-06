@@ -7,7 +7,7 @@ import { MenuOutlined } from '@ant-design/icons';
 import { useState, memo, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { checkAuth } from './redux/slices/authSlice';
-import { useAppDispatch } from './hooks/useAppDisspatch';
+import { useAppDispatch } from './redux/hooks/useAppDisspatch';
 
 const MemoizedHeader = memo(Header);
 const MemoizedFooter = memo(Footer);

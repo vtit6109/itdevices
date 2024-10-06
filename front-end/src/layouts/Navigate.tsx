@@ -6,7 +6,8 @@ import { BsTable } from "react-icons/bs";
 import { FaChartBar, FaUserShield, FaUser, FaUserSecret } from "react-icons/fa";
 import { PiToolboxFill } from "react-icons/pi";
 import { RiFolderSettingsFill } from "react-icons/ri";
-import { useDataFetching } from '../hooks/useDataFetching'; // Import useDataFetching hook
+import { useDataFetching } from "../redux/hooks/useDataFetching"; 
+
 
 interface NavigateProps {
   closeNav: () => void;
@@ -17,20 +18,18 @@ const Navigate: React.FC<NavigateProps> = ({ closeNav }) => {
     closeNav();
   };
 
-  const { account } = useDataFetching(); // Sử dụng hook useDataFetching để lấy thông tin tài khoản
-
-  console.log(account); // Kiểm tra dữ liệu tài khoản
+  const { account } = useDataFetching(); 
 
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'admin':
-        return <FaUserShield size={40} />;
+        return <FaUserShield style={{color:"#173c78"}} size={40} />;
       case 'user':
-        return <FaUser size={40} />;
+        return <FaUser style={{color:"#173c78"}} size={40} />;
       case 'guest':
-        return <FaUserSecret size={40} />;
+        return <FaUserSecret style={{color:"#173c78"}} size={40} />;
       default:
-        return <FaUser size={40} />;
+        return <FaUser style={{color:"#173c78"}} size={40} />;
     }
   };
 
@@ -39,8 +38,9 @@ const Navigate: React.FC<NavigateProps> = ({ closeNav }) => {
       <div className="bg-custom-navy-light p-3">
         <h1 className="font-bold text-center flex justify-center items-center">
           <Avatar
+          className='bg-white'
             size={{ sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
-            icon={account ? getRoleIcon(account.accountRole) : <FaUserSecret size={40} />}
+            icon={account ? getRoleIcon(account.accountRole) : <FaUserSecret style={{color:"#173c78"}} size={40} />}
             style={{ border: '2px solid green' }}
           />
           <div className='ml-5 text-left'>

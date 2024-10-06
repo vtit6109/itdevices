@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
-// Định nghĩa kiểu dữ liệu cho User
 interface User {
   id: number;
   userName: string;
@@ -12,21 +11,18 @@ interface User {
   postName: string;
 }
 
-// Định nghĩa kiểu dữ liệu cho state
 interface UserState {
   users: User[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
-// Khởi tạo state
 const initialState: UserState = {
   users: [],
   status: 'idle',
   error: null,
 };
 
-// Hàm helper để tạo axios instance
 const createAxiosInstance = () => {
   return axios.create({
     headers: {
@@ -35,7 +31,6 @@ const createAxiosInstance = () => {
   });
 };
 
-// Tạo async thunk để lấy tất cả users
 export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'users/fetchUsers',
   async (_, { rejectWithValue }) => {
@@ -55,7 +50,6 @@ export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }
   }
 );
 
-// Tạo async thunk để lấy user theo ID
 export const fetchUserById = createAsyncThunk<User, number, { rejectValue: string }>(
   'users/fetchUserById',
   async (id, { rejectWithValue }) => {
@@ -75,7 +69,6 @@ export const fetchUserById = createAsyncThunk<User, number, { rejectValue: strin
   }
 );
 
-// Tạo async thunk để tạo user mới
 export const createUser = createAsyncThunk<User, Omit<User, 'id'>, { rejectValue: string }>(
   'users/createUser',
   async (userData, { rejectWithValue }) => {
@@ -95,7 +88,6 @@ export const createUser = createAsyncThunk<User, Omit<User, 'id'>, { rejectValue
   }
 );
 
-// Tạo async thunk để cập nhật user
 export const updateUser = createAsyncThunk<User, { id: number, userData: Partial<User> }, { rejectValue: string }>(
   'users/updateUser',
   async ({ id, userData }, { rejectWithValue }) => {
@@ -115,7 +107,6 @@ export const updateUser = createAsyncThunk<User, { id: number, userData: Partial
   }
 );
 
-// Tạo async thunk để xóa user
 export const deleteUser = createAsyncThunk<number, number, { rejectValue: string }>(
   'users/deleteUser',
   async (id, { rejectWithValue }) => {
@@ -135,7 +126,6 @@ export const deleteUser = createAsyncThunk<number, number, { rejectValue: string
   }
 );
 
-// Tạo slice
 const userSlice = createSlice({
   name: 'users',
   initialState,

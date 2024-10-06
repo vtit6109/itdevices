@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useDataFetching } from '../../hooks/useDataFetching';
+import { useDataFetching } from '../../redux/hooks/useDataFetching';
 import { Table, Input } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import { Spin } from 'antd'; 

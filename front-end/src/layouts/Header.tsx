@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form, Input, message } from 'antd';
 import { login } from '../redux/slices/authSlice'; // Import login action
 import { RootState, AppDispatch } from '../redux/store'; // Import AppDispatch
-import useLogout from '../hooks/useLogout'; // Import useLogout hook
+import useLogout from '../redux/hooks/useLogout'; // Import useLogout hook
 
 const Header: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -38,12 +38,12 @@ const Header: React.FC = () => {
         <div className="bg-orange-500 p-4">
           {isAuthenticated ? (
             <>
-              <Button type="link" onClick={handleLogout} style={{ color: 'white' }}>
+              <Button className='font-bold text-white' type="link" onClick={handleLogout}>
                 Đăng Xuất
               </Button>
             </>
           ) : (
-            <Button type="link" onClick={showModal} style={{ color: 'white' }}>
+            <Button className='font-bold text-white' type="link" onClick={showModal}>
               Đăng Nhập
             </Button>
           )}

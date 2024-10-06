@@ -4,7 +4,7 @@ import Card from '../components/CardInfo';
 import { FaUsers } from 'react-icons/fa'; 
 import { GiLaptop, GiCctvCamera } from "react-icons/gi";
 import { BsQrCodeScan } from "react-icons/bs";
-import { useDataFetching } from '../hooks/useDataFetching';
+import { useDataFetching } from '../redux/hooks/useDataFetching';
 import { Spin } from 'antd'; 
 
 const Dashboard: React.FC = () => {
